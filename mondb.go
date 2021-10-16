@@ -4,7 +4,7 @@ package mondb
 type Monster struct {
 	Name string
 	Items
-	Aran int `json:"aRan"`
+	AttackRange int `json:"aRan"`
 	Info
 	DBName []string `json:"db_name"`
 }
@@ -30,8 +30,6 @@ type Items struct {
 
 type Info struct {
 	Stats
-	AttackRange
-	Def int `json:"def"`
 	Experience
 	Inc          int            `json:"inc"`
 	As           int            `json:"as"`
@@ -49,20 +47,18 @@ type Info struct {
 }
 
 type Stats struct {
-	Level int `json:"LV"`
-	HP    int
-	SP    int
-	Str   int `json:"str"`
-	Int   int `json:"int"`
-	Vit   int `json:"vit"`
-	Dex   int `json:"dex"`
-	Agi   int `json:"agi"`
-	Luk   int `json:"luk"`
-}
-
-type AttackRange struct {
-	Low  int `json:"atk1"`
-	High int `json:"atk2"`
+	Level   int `json:"LV"`
+	HP      int
+	SP      int
+	Str     int `json:"str"`
+	Int     int `json:"int"`
+	Vit     int `json:"vit"`
+	Dex     int `json:"dex"`
+	Agi     int `json:"agi"`
+	Luk     int `json:"luk"`
+	LowAtk  int `json:"atk1"`
+	HighAtk int `json:"atk2"`
+	Def     int `json:"def"`
 }
 
 type Experience struct {
