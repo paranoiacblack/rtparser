@@ -33,8 +33,31 @@ func TestUnmarshalMonster(t *testing.T) {
 
 // A subset of monsters used in the following tests, arbitrarily chosen.
 var (
-	Alarm       = Monster{Name: "Alarm", Info: Info{Property: Neutral3, Race: Formless, Size: Medium}}
-	Cornutus    = Monster{Name: "Cornutus", Info: Info{Property: Water1, Race: Fish, Size: Small}}
+	Alarm = Monster{
+		Name: "Alarm",
+		Info: Info{
+			Stats: Stats{
+				AttackRange: 1,
+				Level:       58,
+				HP:          10647,
+				LowAtk:      480,
+				HighAtk:     120,
+				Def:         15,
+			},
+			Property: Neutral3,
+			Size:     Medium,
+			Race:     Formless,
+			Mdef:     15,
+		},
+	}
+	Cornutus = Monster{
+		Name: "Cornutus",
+		Info: Info{
+			Property: Water1,
+			Size:     Small,
+			Race:     Fish,
+		},
+	}
 	Deniro      = Monster{Name: "Deniro", Info: Info{Property: Earth1, Race: Insect, Size: Small}}
 	Picky       = Monster{Name: "Picky", Info: Info{Property: Fire1, Race: Brute, Size: Small}}
 	RotarZairo  = Monster{Name: "Rotar Zairo", Info: Info{Property: Wind2, Race: Formless, Size: Large}}

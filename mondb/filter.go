@@ -1,4 +1,3 @@
-// Monster Filters
 package mondb
 
 import "sort"
@@ -53,6 +52,7 @@ func (ms *monsterSorter) Less(i, j int) bool {
 	return ms.compareFn(ms.monsters[i], ms.monsters[j])
 }
 
+// Direction is the order the monsters will be sorted.
 type Direction int
 
 const (

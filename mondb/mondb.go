@@ -1,14 +1,22 @@
 // Package mondb defines RagnarokTravels Monsters based on JSON-format in https://account.ragnaroktravels.com/mondrops.
 package mondb
 
+// Monster represents a Ragnarok Online monster.
 type Monster struct {
+	// Monster's in-game display name.
 	Name string
 	Items
-	AttackRange int `json:"aRan"`
 	Info
+	// Monster's name in RTDB, usually the kRO original name.
 	DBName []string `json:"db_name"`
 }
 
+// Items represent the set of items a monster can drop.
+// Note many monsters don't drop 8 unique items or any at all.
+// RTDB represents this by making missing item slots an "apple"
+// with a zero-percent drop rate.
+// The eighth item dropped by a monster is always its card, if
+// it has a card.
 type Items struct {
 	Item1    []string `json:"item1"`
 	Percent1 int      `json:"percent1"`
@@ -28,49 +36,86 @@ type Items struct {
 	Percent8 int      `json:"percent8"`
 }
 
+// Info represents game information related to a monster.
 type Info struct {
 	Stats
-	Experience
-	Inc          int            `json:"inc"`
-	As           int            `json:"as"`
-	Es           int            `json:"es"`
-	Mspeed       int            `json:"Mspeed"`
-	RechargeTime int            `json:"rechargeTime"`
-	AttackedMT   int            `json:"attackedMT"`
-	AttackMT     int            `json:"attackMT"`
-	Property     Property       `json:"property"`
-	Size         Size           `json:"scale"`
-	Class        Classification `json:"class"`
-	Race         Race           `json:"race"`
-	Mdef         int            `json:"mdef"`
+	Property Property       `json:"property"`
+	Size     Size           `json:"scale"`
+	Class    Classification `json:"class"`
+	Race     Race           `json:"race"`
+	Mdef     int            `json:"mdef"`
 	PetInfo
 }
 
+// Stats represent fundamental monster statistics.
 type Stats struct {
-	Level   int `json:"LV"`
-	HP      int
-	SP      int
-	Str     int `json:"str"`
-	Int     int `json:"int"`
-	Vit     int `json:"vit"`
-	Dex     int `json:"dex"`
-	Agi     int `json:"agi"`
-	Luk     int `json:"luk"`
-	LowAtk  int `json:"atk1"`
+	// AttackRange is cell-distance the monster can attack from.
+	// Zero attack range means the monster cannot attack.
+	// One attack range is standard melee attack range.
+	// Seven attack range is standard ranged attack range.
+	AttackRange int `json:"aRan"`
+	Level       int `json:"LV"`
+	HP          int
+	SP          int
+	Str         int `json:"str"`
+	Int         int `json:"int"`
+	Vit         int `json:"vit"`
+	Dex         int `json:"dex"`
+	Agi         int `json:"agi"`
+	Luk         int `json:"luk"`
+	LowAtk      int `json:"atk1"`
+	// TODO(paranoiacblack): HighAtk is the number to add to LowAtk rather
+	// than the value of the monsters highest attack. Add a custom marshaller
+	// here to remove this possible confusion.
 	HighAtk int `json:"atk2"`
 	Def     int `json:"def"`
+
+	Experience
+
+	// Inc is the same as the monster's level from what I can tell.
+	// Unknown what this represents exactly.
+	Inc int `json:"inc"`
+	// Spellrange is cell-distance the monster can cast spells from.
+	SpellRange int `json:"as"`
+	// SightRange is cell-distance the monster can see player characters from.
+	SightRange int       `json:"es"`
+	MoveSpeed  MoveSpeed `json:"Mspeed"`
+	// AttackDelay is amount of time between a monster's attacks, in milliseconds.
+	AttackDelay int `json:"rechargeTime"`
+	// HurtDelay is the amount of time a monster idles after being hit, in milliseconds.
+	HurtDelay int `json:"attackedMT"`
+	// HitDelay is the amount of time a monster idles after hitting a player, in milliseconds.
+	HitDelay int `json:"attackMT"`
 }
 
+// MoveSpeed represents a monster's movement speed.
+type MoveSpeed int
+
+// Thresholds for movement speeds.
+const (
+	Immovable MoveSpeed = 1000
+	VerySlow            = 350
+	Slow                = 200
+	Average             = 170
+	Fast                = 130
+	VeryFast            = 100
+)
+
+// Experience represents the amount of character experience gained
+// by defeating a monster.
 type Experience struct {
 	Base int `json:"exp"`
 	Job  int `json:"jexp"`
 }
 
+// PetInfo represents the taming item and food item for a monster,
+// if the monster is tameable.
 type PetInfo struct {
 	TamingItem string `json:"tamingitem"`
 	FoodItem   string `json:"fooditem"`
 }
 
+// Property is the elemental property of a monster.
 type Property int
 
 func (p Property) String() string {
@@ -205,6 +250,7 @@ const (
 	Undead4                 = 89
 )
 
+// Size is the monster size.
 type Size int
 
 func (s Size) String() string {
@@ -226,6 +272,7 @@ const (
 	Large
 )
 
+// Classification is the class of monster.
 type Classification int
 
 const (
@@ -233,6 +280,7 @@ const (
 	Boss                // Currently the ragnarok travels DB doesn't provide granularity between mini-boss and MVP.
 )
 
+// Race is the monster's race.
 type Race int
 
 func (r Race) String() string {
